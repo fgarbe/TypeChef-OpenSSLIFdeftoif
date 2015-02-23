@@ -1,0 +1,6 @@
+< // Linking fix! cannot map void to type.
+< void sha1_block_data_order (SHA_CTX *c,const void *p,size_t len);
+---
+> 
+> void sha1_block_data_order (void *c,const void *p,size_t len);
+

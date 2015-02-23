@@ -1,0 +1,17 @@
+933,938d932
+<             
+<             int refactorLinkFix2;
+<             refactorLinkFix2 = -1;
+<             ossl_ssize_t refactorLinkFix3;
+<             refactorLinkFix3 = -1;
+<                 
+940c934
+< 						refactorLinkFix2, NID_undef, NID_undef,
+---
+> 						-1, NID_undef, NID_undef,
+1073,1075c1067
+<                 ossl_ssize_t refactorLinkFix;
+<                 refactorLinkFix = -1;
+< 			if (!CMS_decrypt_set1_password(cms, pwri_pass, refactorLinkFix))
+---
+> 	

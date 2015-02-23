@@ -1,0 +1,5 @@
+< // added void parameter as it causes linking error
+< CONF_METHOD *NCONF_default(void)
+---
+> 
+> CONF_METHOD *NCONF_default()

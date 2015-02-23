@@ -1,0 +1,66 @@
+#!/bin/bash
+
+ABSPATH=$(cd "$(dirname "$0")"; pwd)
+
+echo ""
+echo ""
+echo "-=== ALL PARAMS ===-"
+echo $@
+echo ""
+echo ""
+echo "-=== FILTERED PARAMS ===-"
+FILTEREDPARAMS=`$ABSPATH/filterargs $@`
+FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
+
+FNAME=`pwd`/$FNAME
+
+
+echo $FILTEREDPARAMS
+echo filename "$FNAME"
+
+echo ""
+echo ""
+/usr/bin/gcc $@
+
+# set output files
+outBase="$(dirname $FNAME)/$(basename $FNAME .c)"
+outDbg="$outBase.dbg"
+outPartialPreproc="$outBase.pi"
+outErr="$outBase.err"
+outTime="$outBase.time"
+
+# base parameters
+baseParam="
+	--bdd --no-warnings \
+	-I /usr/local/include \
+	-I /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.3/include-fixed \
+	-I /usr/lib/gcc/x86_64-pc-linux-gnu/4.6.3/include \
+	-I /usr/lib/gcc/x86_64-pc-linux-gnu \
+	-I /usr/include 
+	--platfromHeader    $ABSPATH/platform.h \
+	--openFeat          $ABSPATH/openfeatures.txt \
+	--featureModelFExpr $ABSPATH/fm.txt \
+	--typeSystemFeatureModelDimacs $ABSPATH/OpenSSL.dimacs \
+	--include $ABSPATH/partial_configuration.h \
+	--serializeAST \
+	--interface --debugInterface \
+	--recordTiming --parserstatistics --lexNoStdout \
+	--writePI $FILTEREDPARAMS "
+
+# run typechef only in case we have a c file
+if [[ -n $FNAME ]];
+then
+
+	echo "Starting TypeChef"
+	# TypeChef resides next to TypeChef-<projectname> two levels up
+	# create the serialized AST in the first run
+	# apply sampling and family-based analysis for each strategy afterwards
+	# in a single run
+	$ABSPATH/../../TypeChef/cRefactor.sh \
+		$baseParam \
+		$FNAME
+		2> "$outErr" | tee -a "$outDbg"
+fi
+
+echo "Finished"
+echo ""

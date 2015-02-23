@@ -1,0 +1,4 @@
+166c166
+< TS_RESP_CTX *TS_RESP_CTX_new(void)
+---
+> TS_RESP_CTX *TS_RESP_CTX_new()
