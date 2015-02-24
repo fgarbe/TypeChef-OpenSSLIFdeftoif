@@ -13,7 +13,7 @@ cd $path
 #cd $path
 
 filesToProcess() {
-  local listFile=$path/openssl_files
+  local listFile=$path/casestudy/openssl_files
   cat $listFile
 # cat $listFile | sed -n "${1}~8p" 
 }
