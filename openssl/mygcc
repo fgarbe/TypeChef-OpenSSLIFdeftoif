@@ -8,18 +8,18 @@ echo "-=== ALL PARAMS ===-"
 echo $@
 echo ""
 echo ""
-# remove -I arguments as they are merely relative paths, hercules needs direct paths
-FILTEREDPARAMS=$(echo `$ABSPATH/filterargs $@` | sed "s|-I [^-]*||g")
-FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 
+FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 FNAME=`pwd`/$FNAME
+FILEDIR=$(dirname "$FNAME")
+# remove -I arguments as they are merely relative paths, hercules needs direct paths
+FILTEREDPARAMS=$(echo `$ABSPATH/filterargs $@`| sed "s|-I \.\.|-I $FILEDIR\/\.\.|g" | sed "s|-I\.\.|-I $FILEDIR\/\.\.|g" | sed "s|-I \.|-I $FILEDIR|g" | sed "s|-I\.|-I $FILEDIR|g" )
 
 echo "-=== FILTERED PARAMS ===-"
 echo $FILTEREDPARAMS
-echo filename "$FNAME"
-
 echo ""
 echo ""
+echo "-=== FILE $(basename $FNAME) ===-"
 /usr/bin/gcc $@
 
 # set output files
@@ -37,9 +37,6 @@ baseParam="
 	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
 	-I /usr/include/x86_64-linux-gnu \
 	-I /usr/include \
-    -I $ABSPATH \
-	-I $ABSPATH/include \
-	-I $ABSPATH/include/openssl
 	--platfromHeader    $ABSPATH/platform.h \
 	--openFeat          $ABSPATH/openfeatures.txt \
 	--featureModelFExpr $ABSPATH/fm.txt \
@@ -55,6 +52,7 @@ if [[ -n $FNAME ]];
 then
 
 	echo "Starting Hercules."
+#	echo "With params: $baseParam"
 	# TypeChef resides next to TypeChef-<projectname> two levels up
 	# create the serialized AST in the first run
 	# apply sampling and family-based analysis for each strategy afterwards
