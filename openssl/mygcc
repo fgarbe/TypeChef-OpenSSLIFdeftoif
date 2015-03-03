@@ -8,14 +8,13 @@ echo "-=== ALL PARAMS ===-"
 echo $@
 echo ""
 echo ""
-echo "-=== FILTERED PARAMS ===-"
 # remove -I arguments as they are merely relative paths, hercules needs direct paths
 FILTEREDPARAMS=$(echo `$ABSPATH/filterargs $@` | sed "s|-I [^-]*||g")
 FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 
 FNAME=`pwd`/$FNAME
 
-echo "-=== REFILTERED PARAMS ===-"
+echo "-=== FILTERED PARAMS ===-"
 echo $FILTEREDPARAMS
 echo filename "$FNAME"
 
