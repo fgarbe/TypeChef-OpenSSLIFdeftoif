@@ -9,7 +9,8 @@ echo $@
 echo ""
 echo ""
 echo "-=== FILTERED PARAMS ===-"
-FILTEREDPARAMS=`$ABSPATH/filterargs $@`
+# replace the following arguments: '-I . -I .. -I ../include' by their absolute paths
+FILTEREDPARAMS=$(echo `$ABSPATH/filterargs $@` | sed "s|-I \. -I \.\. -I \.\.\/include|-I $ABSPATH -I $ABSPATH\/include -I $ABSPATH\/\.\.\/casestudy |")
 FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 
 FNAME=`pwd`/$FNAME
@@ -36,7 +37,7 @@ baseParam="
 	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed \
 	-I /usr/lib/gcc/x86_64-linux-gnu/4.6/include \
 	-I /usr/include/x86_64-linux-gnu \
-	-I /usr/include 
+	-I /usr/include \
 	--platfromHeader    $ABSPATH/platform.h \
 	--openFeat          $ABSPATH/openfeatures.txt \
 	--featureModelFExpr $ABSPATH/fm.txt \
@@ -51,7 +52,7 @@ baseParam="
 if [[ -n $FNAME ]];
 then
 
-	echo "Starting Hercules"
+	echo "Starting Hercules."
 	# TypeChef resides next to TypeChef-<projectname> two levels up
 	# create the serialized AST in the first run
 	# apply sampling and family-based analysis for each strategy afterwards
