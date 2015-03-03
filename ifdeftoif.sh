@@ -19,6 +19,7 @@ filesToProcess() {
 }
 
 flags=" --bdd \
+      --reuseAST
         -I $path/openssl \
 	 -I $path/openssl/include
 	-I $path/openssl/include/openssl
@@ -29,7 +30,6 @@ flags=" --bdd \
 
 filesToProcess $1|while read i; do
          echo "Ifdeftoif $path/openssl/$i.c"
-         echo "With settings: $flags"
          ../Hercules/ifdeftoif.sh $path/openssl/$i.c $flags
          done
 

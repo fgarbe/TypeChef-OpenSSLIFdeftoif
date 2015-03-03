@@ -51,12 +51,12 @@ baseParam="
 if [[ -n $FNAME ]];
 then
 
-	echo "Starting TypeChef"
+	echo "Starting Hercules"
 	# TypeChef resides next to TypeChef-<projectname> two levels up
 	# create the serialized AST in the first run
 	# apply sampling and family-based analysis for each strategy afterwards
 	# in a single run
-	$ABSPATH/../../Morpheus/morpheus.sh \
+	$ABSPATH/../../Hercules/ifdeftoif.sh \
 		$baseParam \
 		$FNAME
 		2> "$outErr" | tee -a "$outDbg"
