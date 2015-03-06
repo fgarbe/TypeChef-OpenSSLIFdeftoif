@@ -2,24 +2,24 @@
 
 ABSPATH=$(cd "$(dirname "$0")"; pwd)
 
-echo ""
-echo ""
-echo "-=== ALL PARAMS ===-"
-echo $@
-echo ""
-echo ""
+#echo ""
+#echo ""
+#echo "-=== ALL PARAMS ===-"
+#echo $@
+#echo ""
+#echo ""
 
 FNAME=`$ABSPATH/filtername $@ | tr -d ' '`
 FNAME=`pwd`/$FNAME
 FILEDIR=$(dirname "$FNAME")
 # remove -I arguments as they are merely relative paths, hercules needs direct paths
-FILTEREDPARAMS=$(echo `$ABSPATH/filterargs $@`| sed "s|-I \.\.|-I $FILEDIR\/\.\.|g" | sed "s|-I\.\.|-I $FILEDIR\/\.\.|g" | sed "s|-I \.|-I $FILEDIR|g" | sed "s|-I\.|-I $FILEDIR|g" )
+FILTEREDPARAMS=`$ABSPATH/filterargs $@`
 
-echo "-=== FILTERED PARAMS ===-"
-echo $FILTEREDPARAMS
-echo ""
-echo ""
-echo "-=== FILE $(basename $FNAME) ===-"
+#echo "-=== FILTERED PARAMS ===-"
+#echo $FILTEREDPARAMS
+#echo ""
+#echo ""
+#echo "-=== FILE $(basename $FNAME) ===-"
 /usr/bin/gcc $@
 
 # set output files
@@ -52,16 +52,14 @@ if [[ -n $FNAME ]];
 then
 
 	echo "Starting Hercules."
-#	echo "With params: $baseParam"
-	# TypeChef resides next to TypeChef-<projectname> two levels up
-	# create the serialized AST in the first run
-	# apply sampling and family-based analysis for each strategy afterwards
-	# in a single run
+	# echo "With params: $baseParam"
+	# Hercules resides next to TypeChef-<projectname> two levels up
+	# create the serialized AST in the first run, apply ifdeftoif afterwards
 	$ABSPATH/../../Hercules/ifdeftoif.sh \
 		$baseParam \
 		$FNAME
 		2> "$outErr" | tee -a "$outDbg"
 fi
 
-echo "Finished"
-echo ""
+#echo "Finished"
+#echo ""
